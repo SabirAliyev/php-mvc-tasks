@@ -7,12 +7,12 @@ use Exception;
 
 class Router
 {
-    protected $routes = [
+    protected array $routes = [
         'GET' => [],
         'POST' => [],
     ];
 
-    public static function load(string $file)
+    public static function load(string $file): static
     {
         $router = new static();
         require $file;
@@ -20,16 +20,19 @@ class Router
         return $router;
     }
 
-    public function get($uri, $controller)
+    public function get($uri, $controller): void
     {
         $this->routes['GET'][$uri] = $controller;
     }
 
-    public function post($uri, $controller)
+    public function post($uri, $controller): void
     {
         $this->routes['POST'][$uri] = $controller;
     }
 
+    /**
+     * @throws Exception
+     */
     public function direct(string $uri, string $method)
     {
         if (array_key_exists($uri, $this->routes[$method])) {

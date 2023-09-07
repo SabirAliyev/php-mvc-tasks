@@ -11,10 +11,8 @@
     </ul>
 </header>
 
-<section>
-    <h1>Add new Task</h1>
     <section>
-        <h1>Add new Task</h1>
+        <h3>Add new Task</h3>
         <form action="/tasks" method="post" style="display: flex; flex-direction: column;">
             <label style="margin-bottom: 10px;">
                 Title:
@@ -27,6 +25,5 @@
             <input type="submit" width="100" value="Submit" style="width: 200px; margin-left: 200px" >
         </form>
     </section>
-</section>
 
 <?php require 'views/layouts/bottom.php' ?>

@@ -1,5 +1,7 @@
 <?php
 
+const ERROR_LOG_PATH = '/home/sa/php-projects/php-mvc-tasks/app/log/error.log';
+
 return [
     'database' => [
         'dbname' => 'tasks_mvc_db',
