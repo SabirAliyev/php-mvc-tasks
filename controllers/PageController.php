@@ -13,4 +13,10 @@ class PageController
         return view('pages.index', compact('title'));
     }
 
+    public function add()
+    {
+        $title = 'Add';
+        return view('pages.add', compact('title'));
+    }
+
 }

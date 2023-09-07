@@ -24,24 +24,18 @@ class TaskController
 
     public static function store()
     {
-        // Log POST data
-        error_log("POST data: " . print_r($_POST, true), 3, ERROR_LOG_PATH);
-
         // Save the task.
         try {
-            $insertId = App::get('db')->insert('tasks', ['title' => $_POST['title'], 'description' => $_POST['description']]);
-            error_log("Inserted ID: " . $insertId, 3, "logs/app.log");
+            App::get('db')->insert('tasks', ['title' => $_POST['title'], 'description' => $_POST['description']]);
+            $_SESSION['task_added'] = 'Task successfully added!';
         }
         catch (Exception $e) {
-            error_log("Exception in store(): " . $e->getMessage(), 3, ERROR_LOG_PATH);
+            $_SESSION['task_error'] = 'An error occurred while adding the task.';
             require "views/pages/500.php";
             dd($e->getMessage());
         }
 
-        // Log redirect
-        error_log("About to redirect to tasks", 3, "logs/app.log");
-
         // Redirect to tasks.
-        return redirect('tasks');
+        return redirect('add');
     }
 }
