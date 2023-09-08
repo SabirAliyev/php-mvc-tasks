@@ -24,15 +24,29 @@ class TaskController
     {
         try {
             App::get('db')->insert('tasks', ['title' => $_POST['title'], 'description' => $_POST['description']]);
-            $_SESSION['task_added'] = 'Task successfully added!';
         }
         catch (Exception $e) {
-            $_SESSION['task_error'] = 'An error occurred while adding the task.';
             require "views/pages/500.php";
         }
 
         // Redirect to the same (add) page.
         return redirect('add');
+    }
+
+    public static function update()
+    {
+        $id = $_POST['id'];
+
+        try {
+            App::get('db')->update('tasks', $id, ['title' => $_POST['title'], 'description' => $_POST['description']]);
+        }
+        catch (Exception $e) {
+            error_log("Exception: " . $e->getMessage(), 3, "log/error.log");
+            return redirect('500');
+        }
+
+        // Redirect to the tasks list page.
+        return redirect('tasks');
     }
 
 
@@ -54,7 +68,7 @@ class TaskController
         $task = new Task();
 
         try {
-            $task = App::get('db')->selectOne($id, 'tasks', Task::class);
+            $task = App::get('db')->selectOne('tasks', $id, Task::class);
         } catch (Exception $e){
             error_log("Exception: " . $e->getMessage(), 3, ERROR_LOG_PATH);
         }

@@ -1,6 +1,21 @@
 <?php require 'views/layouts/top.php' ?>
-    <header>
-        <h1>Tasks</h1>
+
+<head>
+    <style>
+        .scrollable-div {
+            height: 400px;
+            width: 1000px;
+            overflow-y: auto;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+    </style>
+    <title></title>
+</head>
+
+<header>
+    <h1>Tasks</h1>
+    <div class="scrollable-div">
         <ul>
             <?php foreach ($tasks as $task) : ?>
                 <a href="tasks/details?id=<?= $task->getId(); ?>" style="text-decoration: none; color: inherit;">
@@ -13,6 +28,6 @@
                 <hr>
             <?php endforeach; ?>
         </ul>
-    </header>
-
+    </div>
+</header>
 <?php require 'views/layouts/bottom.php' ?>

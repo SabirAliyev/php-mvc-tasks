@@ -5,8 +5,9 @@
 
 <section>
     <h3>View task details</h3>
-    <form action="/tasks" method="post" style="display: flex; flex-direction: column;">
-        <input type="hidden" name="_method" value="DELETE">
+    <form action="/tasks/details" method="post" style="display: flex; flex-direction: column;">
+        <input type="hidden" name="_method" value="UPDATE">
+        <input type="hidden" name="id" value="<?= $task->getId(); ?>">
         <label style="margin-bottom: 10px;">
             Title:
             <textarea name="title" cols="50" rows="1" style="margin-left: 56px"><?= $task->getTitle(); ?></textarea>

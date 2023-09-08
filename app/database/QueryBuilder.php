@@ -39,7 +39,27 @@ class QueryBuilder
         $query->execute($parameters);
     }
 
-    public function selectOne(int $id, string $table, string $fetchClass=null): Task
+    public function update(string $table, int $id, array $parameters): void
+    {
+        $setFields = [];
+        foreach ($parameters as $key => $value) {
+            $setFields[] = "$key = :$key";
+        }
+        $setString = implode(', ', $setFields);
+
+        $sql = sprintf(
+            "UPDATE %s SET %s WHERE id = :id",
+            $table,
+            $setString
+        );
+
+        $query = $this->db->prepare($sql);
+        $parameters['id'] = $id; // Add the id to the parameters array
+        $query->execute($parameters);
+    }
+
+
+    public function selectOne(string $table, int $id,  string $fetchClass=null): Task
     {
         try {
             $query = $this->db->prepare("select * from $table where id = :id");
