@@ -1,7 +1,9 @@
 <?php
 
 namespace App\App\Database;
+use App\Models\Task;
 use \PDO;
+use PDOException;
 
 // A class responsible for building database queries.
 class QueryBuilder
@@ -36,4 +38,29 @@ class QueryBuilder
         $query = $this->db->prepare($sql);
         $query->execute($parameters);
     }
+
+    public function selectOne(int $id, string $table, string $fetchClass=null): Task
+    {
+        try {
+            $query = $this->db->prepare("select * from $table where id = :id");
+            $query->bindParam(':id', $id, PDO::PARAM_INT);
+            $query->execute();
+
+            if ($fetchClass) {
+                $query->setFetchMode(PDO::FETCH_CLASS, $fetchClass);
+                return $query->fetch();
+            }
+        } catch (PDOException $e) {
+            dd($e->getMessage());
+        }
+
+        return $query->fetch(PDO::FETCH_ASSOC);
+    }
 }
+
+
+
+
+
+
+

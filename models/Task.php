@@ -5,16 +5,22 @@ namespace App\Models;
 // A class that represents a ToDo task.
 class Task
 {
+    protected int $id;
     protected string $title;
     protected string $description;
     protected bool $completed;
+
+    public function getId(): int
+    {
+        return $this->id;
+    }
 
     public function setTitle($newTitle): void
     {
         $this->title = $newTitle;
     }
 
-    public function title(): string
+    public function getTitle(): string
     {
         return $this->title;
     }
@@ -24,7 +30,7 @@ class Task
         $this->description = $newDescription;
     }
 
-    public function description(): string
+    public function getDescription(): string
     {
         return $this->description;
     }

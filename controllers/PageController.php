@@ -19,4 +19,16 @@ class PageController
         return view('pages.add', compact('title'));
     }
 
+    public function show()
+    {
+        $title = 'Show';
+        return view('pages.details', compact('title'));
+    }
+
+    public function error_404()
+    {
+        $title = '404';
+        return view('pages.404', compact('title'));
+    }
+
 }
