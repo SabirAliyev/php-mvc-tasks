@@ -5,6 +5,8 @@ use App\App\App;
 use App\Models\Task;
 use Exception;
 
+session_start();
+
 class TaskController
 {
     public static function index()
@@ -22,16 +24,34 @@ class TaskController
 
     public static function store()
     {
+        // Store the form data in session variables
+        $_SESSION['title'] = $_POST['title'];
+        $_SESSION['description'] = $_POST['description'];
+
+        if (empty($_POST['title']) || empty($_POST['description'])) {
+            $_SESSION['message'] = "Title and description cannot be empty.";
+            return redirect('add');
+        }
+
+        $task = new Task();
+        $task->setTitle($_POST['title']);
+
         try {
             App::get('db')->insert('tasks', ['title' => $_POST['title'], 'description' => $_POST['description']]);
+            $_SESSION['message'] = "New Task " . $task->getTitle() . " added";
+
+            // Clear the form data from session variables
+            unset($_SESSION['title']);
+            unset($_SESSION['description']);
         }
         catch (Exception $e) {
+            error_log($e->getMessage());
             require "views/pages/500.php";
         }
 
-        // Redirect to the same (add) page.
         return redirect('add');
     }
+
 
     public static function update()
     {

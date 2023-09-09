@@ -16,7 +16,7 @@
             Description:
             <textarea name="description" cols="50" rows="10"><?= $task->getDescription(); ?></textarea>
         </label>
-        <input type="submit" width="100" value="Submit" style="width: 200px; margin-left: 200px" >
+        <input type="submit" width="100" value="Save" style="width: 200px; margin-left: 200px" >
     </form>
 </section>
 
