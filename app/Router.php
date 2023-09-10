@@ -30,6 +30,11 @@ class Router
         $this->routes['POST'][$uri] = $controller;
     }
 
+    public function delete($uri, $controller): void
+    {
+        $this->routes['DELETE'][$uri] = $controller;
+    }
+
     /**
      * @throws Exception
      */

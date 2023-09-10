@@ -83,9 +83,11 @@ class QueryBuilder
             $table,
         );
 
+        echo $sql;
+
         $query = $this->db->prepare($sql);
-        $param['id'] = $id;
-        $query->execute($param);
+        $params['id'] = $id;
+        $query->execute($params);
     }
 }
 

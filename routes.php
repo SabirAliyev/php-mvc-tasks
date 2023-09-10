@@ -8,3 +8,4 @@ $router->get('tasks', 'TaskController@index');
 $router->get('tasks/details', 'TaskController@show');
 $router->post('tasks', 'TaskController@store');
 $router->post('tasks/details', 'TaskController@update');
+$router->post('tasks/details', 'TaskController@delete');

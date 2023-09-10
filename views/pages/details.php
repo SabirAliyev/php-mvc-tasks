@@ -20,9 +20,14 @@ require 'views/layouts/top.php' ?>
             <textarea name="description" cols="50" rows="10"><?= $task->getDescription(); ?></textarea>
         </label>
         <div style="display: flex; justify-content: flex-start; margin-left: 140px;">
-            <input type="submit" name="action" value="save" style="width: 200px; margin-right: 10px;">
-<!--            <input type="submit" name="action" value="delete" style="width: 100px;">-->
+            <input type="submit" value="Save" style="width: 200px; margin-right: 10px;">
         </div>
+    </form>
+
+    <form action="/tasks/details" method="post" style="margin-left: 350px">
+        <input type="hidden" name="_method" value="DELETE">
+        <input type="hidden" name="id" value="<?= $task->getId(); ?>">
+        <input type="submit" value="Delete" style="width: 100px;">
     </form>
 
     <?php
