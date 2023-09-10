@@ -4,7 +4,7 @@
     <style>
         .scrollable-div {
             height: 400px;
-            width: 1000px;
+            width: 800px;
             overflow-y: auto;
             border: 1px solid #ccc;
             border-radius: 4px;

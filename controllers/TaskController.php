@@ -22,54 +22,6 @@ class TaskController
         return view('tasks.index', compact('tasks', 'title'));
     }
 
-    public static function store()
-    {
-        // Store the form data in session variables
-        $_SESSION['title'] = $_POST['title'];
-        $_SESSION['description'] = $_POST['description'];
-
-        if (empty($_POST['title']) || empty($_POST['description'])) {
-            $_SESSION['message'] = "Title and description cannot be empty.";
-            return redirect('add');
-        }
-
-        $task = new Task();
-        $task->setTitle($_POST['title']);
-
-        try {
-            App::get('db')->insert('tasks', ['title' => $_POST['title'], 'description' => $_POST['description']]);
-            $_SESSION['message'] = "New Task " . $task->getTitle() . " added";
-
-            // Clear the form data from session variables
-            unset($_SESSION['title']);
-            unset($_SESSION['description']);
-        }
-        catch (Exception $e) {
-            error_log($e->getMessage());
-            require "views/pages/500.php";
-        }
-
-        return redirect('add');
-    }
-
-
-    public static function update()
-    {
-        $id = $_POST['id'];
-
-        try {
-            App::get('db')->update('tasks', $id, ['title' => $_POST['title'], 'description' => $_POST['description']]);
-        }
-        catch (Exception $e) {
-            error_log("Exception: " . $e->getMessage(), 3, "log/error.log");
-            return redirect('500');
-        }
-
-        // Redirect to the tasks list page.
-        return redirect('tasks');
-    }
-
-
     public function show()
     {
         $id = $_GET['id'];
@@ -94,5 +46,87 @@ class TaskController
         }
 
         return $task;
+    }
+
+    public static function store()
+    {
+        $_SESSION['title'] = $_POST['title'];
+        $_SESSION['description'] = $_POST['description'];
+
+        if (empty($_POST['title']) || empty($_POST['description'])) {
+            $_SESSION['error'] = "Title and description cannot be empty.";
+            return redirect('add');
+        }
+
+        $task = new Task();
+        $task->setTitle($_POST['title']);
+
+        try {
+            App::get('db')->insert('tasks', ['title' => $_POST['title'], 'description' => $_POST['description']]);
+            $_SESSION['message'] = "New Task '" . $task->getTitle() . "' added";
+
+            unset($_SESSION['title']);
+            unset($_SESSION['description']);
+        }
+        catch (Exception $e) {
+            error_log($e->getMessage());
+            require "views/pages/500.php";
+        }
+
+        return redirect('add');
+    }
+
+    public static function update()
+    {
+        echo "Update method";
+
+        $_SESSION['title'] = $_POST['title'];
+        $_SESSION['description'] = $_POST['description'];
+        $id = $_POST['id'];
+
+        if (empty($_POST['title']) || empty($_POST['description'])) {
+            $_SESSION['error'] = "Title and Description boxes cannot be empty.";
+        }
+
+        $action = $_POST['action'];
+        $task = new Task();
+        $task->setTitle($_POST['title']);
+
+        if ($action === 'save'){
+            try {
+                echo "updating";
+                App::get('db')->update('tasks', $id, ['title' => $_POST['title'], 'description' => $_POST['description']]);
+
+                if (!$_SESSION['error']){
+                    $_SESSION['message'] = "New Task '" . $task->getTitle() . "' updated";
+                }
+
+                unset($_SESSION['title']);
+                unset($_SESSION['description']);
+            }
+            catch (Exception $e) {
+                error_log("Exception: " . $e->getMessage(), 3, "log/error.log");
+                return redirect('500');
+            }
+        } elseif ($action === 'delete') {
+            self::delete($id);
+        }
+
+        // Stay on the page.
+        return redirect('tasks/details'.'?id='."$id");
+    }
+
+    private static function delete(int $id)
+    {
+        try {
+            App::get('db')->delete(['tasks', $id]);
+        }
+        catch (Exception $e) {
+            error_log("Exception: " . $e->getMessage(), 3, "log/error.log");
+            redirect('500');
+        }
+
+        // Redirect to the tasks list page.
+        return redirect('tasks');
     }
 }

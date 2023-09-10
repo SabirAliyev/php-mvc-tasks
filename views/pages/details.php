@@ -1,4 +1,7 @@
-<?php require 'views/layouts/top.php' ?>
+<?php
+session_start();
+require 'views/layouts/top.php' ?>
+
 <header>
 
 </header>
@@ -16,8 +19,25 @@
             Description:
             <textarea name="description" cols="50" rows="10"><?= $task->getDescription(); ?></textarea>
         </label>
-        <input type="submit" width="100" value="Save" style="width: 200px; margin-left: 200px" >
+        <div style="display: flex; justify-content: flex-start; margin-left: 140px;">
+            <input type="submit" name="action" value="save" style="width: 200px; margin-right: 10px;">
+<!--            <input type="submit" name="action" value="delete" style="width: 100px;">-->
+        </div>
     </form>
+
+    <?php
+    if (isset($_SESSION['message'])) {
+        echo "<div style='margin-top: 20px; color: deepskyblue'>" . $_SESSION['message'] . "</div>";
+        unset($_SESSION['message']);
+    }
+    ?>
+
+    <?php
+    if (isset($_SESSION['error'])) {
+        echo "<div style='margin-top: 20px; color: red'>" . $_SESSION['error'] . "</div>";
+        unset($_SESSION['error']);
+    }
+    ?>
 </section>
 
 <?php require 'views/layouts/bottom.php' ?>

@@ -27,38 +27,6 @@ class QueryBuilder
         return $query->fetchAll(PDO::FETCH_OBJ);
     }
 
-    public function insert(string $table, array $parameters): void
-    {
-        $sql = sprintf(
-                "INSERT INTO %s (%s) VALUES (%s)",
-                $table,
-                implode(', ', array_keys($parameters)),
-                ':' . implode(', :', array_keys($parameters))
-        );  
-        $query = $this->db->prepare($sql);
-        $query->execute($parameters);
-    }
-
-    public function update(string $table, int $id, array $parameters): void
-    {
-        $setFields = [];
-        foreach ($parameters as $key => $value) {
-            $setFields[] = "$key = :$key";
-        }
-        $setString = implode(', ', $setFields);
-
-        $sql = sprintf(
-            "UPDATE %s SET %s WHERE id = :id",
-            $table,
-            $setString
-        );
-
-        $query = $this->db->prepare($sql);
-        $parameters['id'] = $id; // Add the id to the parameters array
-        $query->execute($parameters);
-    }
-
-
     public function selectOne(string $table, int $id,  string $fetchClass=null): Task
     {
         try {
@@ -75,6 +43,49 @@ class QueryBuilder
         }
 
         return $query->fetch(PDO::FETCH_ASSOC);
+    }
+
+    public function insert(string $table, array $params): void
+    {
+        $sql = sprintf(
+                "INSERT INTO %s (%s) VALUES (%s)",
+                $table,
+                implode(', ', array_keys($params)),
+                ':' . implode(', :', array_keys($params))
+        );  
+        $query = $this->db->prepare($sql);
+        $query->execute($params);
+    }
+
+    public function update(string $table, int $id, array $params): void
+    {
+        $setFields = [];
+        foreach ($params as $key => $value) {
+            $setFields[] = "$key = :$key";
+        }
+        $setString = implode(', ', $setFields);
+
+        $sql = sprintf(
+            "UPDATE %s SET %s WHERE id = :id",
+            $table,
+            $setString
+        );
+
+        $query = $this->db->prepare($sql);
+        $params['id'] = $id;
+        $query->execute($params);
+    }
+
+    public function delete(string $table, int $id): void
+    {
+        $sql = sprintf(
+            "DELETE FROM %s WHERE id = :id",
+            $table,
+        );
+
+        $query = $this->db->prepare($sql);
+        $param['id'] = $id;
+        $query->execute($param);
     }
 }
 

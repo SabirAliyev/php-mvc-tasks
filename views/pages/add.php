@@ -20,8 +20,15 @@ require 'views/layouts/top.php';
 
     <?php
     if (isset($_SESSION['message'])) {
-        echo "<div style='margin-top: 20px; color: red'>" . $_SESSION['message'] . "</div>";
+        echo "<div style='margin-top: 20px; color: deepskyblue'>" . $_SESSION['message'] . "</div>";
         unset($_SESSION['message']);
+    }
+    ?>
+
+    <?php
+    if (isset($_SESSION['error'])) {
+        echo "<div style='margin-top: 20px; color: red'>" . $_SESSION['error'] . "</div>";
+        unset($_SESSION['error']);
     }
     ?>
 
