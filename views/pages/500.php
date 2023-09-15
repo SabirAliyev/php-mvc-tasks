@@ -1,4 +1,5 @@
 <?php require 'views/layouts/top.php' ?>
 
-<p>Something wrong happened.</p>
+<p style="color: red">Error 500. Server error occurred.</p>
+
 <?php require 'views/layouts/bottom.php' ?>

@@ -31,7 +31,7 @@ class TaskController
         if ($task->getId() != 0) {
             return view('pages.details', ['task' => $task]);
         } else {
-            return redirect('error_404');
+            require errorRedirect(404);
         }
     }
 
@@ -70,7 +70,7 @@ class TaskController
         }
         catch (Exception $e) {
             error_log($e->getMessage());
-            require "views/pages/500.php";
+            require errorRedirect(500);
         }
 
         return redirect('add');
@@ -104,7 +104,7 @@ class TaskController
             }
             catch (Exception $e) {
                 error_log("Exception: " . $e->getMessage(), 3, "log/error.log");
-                return redirect('500');
+                require errorRedirect(500);
             }
         } elseif ($method === 'DELETE'){
             self::delete($id);
@@ -125,7 +125,8 @@ class TaskController
         }
         catch (Exception $e) {
             error_log("Exception: " . $e->getMessage(), 3, "log/error.log");
-            return redirect('500');
+            require errorRedirect(500);
+            exit;
         }
     }
 }

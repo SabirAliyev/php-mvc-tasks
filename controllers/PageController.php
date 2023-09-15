@@ -31,4 +31,10 @@ class PageController
         return view('pages.404', compact('title'));
     }
 
+    public function error_500()
+    {
+        $title = '500';
+        return view('pages.500', compact('title'));
+    }
+
 }
