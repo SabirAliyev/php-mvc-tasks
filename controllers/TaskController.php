@@ -81,37 +81,44 @@ class TaskController
         $_SESSION['title'] = $_POST['title'];
         $_SESSION['description'] = $_POST['description'];
 
-        if (empty($_POST['title']) || empty($_POST['description'])) {
-            $_SESSION['error'] = "Title and Description boxes cannot be empty.";
-        }
-
-        $task = new Task();
         $id = $_POST['id'];
-        $task->setTitle($_POST['title']);
+        $method = $_POST['_method'];
 
-        try {
-            App::get('db')->update('tasks', $id, ['title' => $_POST['title'], 'description' => $_POST['description']]);
-
-            if (!$_SESSION['error']){
-                $_SESSION['message'] = "New Task '" . $task->getTitle() . "' updated";
+        if ($method === 'UPDATE'){
+            if (empty($_POST['title']) || empty($_POST['description'])) {
+                $_SESSION['error'] = "Title and Description boxes cannot be empty.";
             }
 
-            unset($_SESSION['title']);
-            unset($_SESSION['description']);
-        }
-        catch (Exception $e) {
-            error_log("Exception: " . $e->getMessage(), 3, "log/error.log");
-            return redirect('500');
+            $task = new Task();
+            $task->setTitle($_POST['title']);
+
+            try {
+                App::get('db')->update('tasks', $id, ['title' => $_POST['title'], 'description' => $_POST['description']]);
+
+                if (!$_SESSION['error']){
+                    $_SESSION['message'] = "New Task '" . $task->getTitle() . "' updated";
+                }
+
+                unset($_SESSION['title']);
+                unset($_SESSION['description']);
+            }
+            catch (Exception $e) {
+                error_log("Exception: " . $e->getMessage(), 3, "log/error.log");
+                return redirect('500');
+            }
+        } elseif ($method === 'DELETE'){
+            self::delete($id);
+
+            // Redirect to the tasks list page.
+            return redirect('tasks');
         }
 
         // Stay on the page.
         return redirect('tasks/details'.'?id='."$id");
     }
 
-    public static function delete()
+    public static function delete(int $id)
     {
-        $id = $_POST['id'];
-
         try {
             echo "Removal... ";
             App::get('db')->delete('tasks', $id);
@@ -120,8 +127,5 @@ class TaskController
             error_log("Exception: " . $e->getMessage(), 3, "log/error.log");
             return redirect('500');
         }
-
-        // Redirect to the tasks list page.
-        return redirect('tasks');
     }
 }
